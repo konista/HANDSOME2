@@ -28,13 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.WB = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
+            // 
+            // WB
+            // 
+            this.WB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WB.Location = new System.Drawing.Point(0, 0);
+            this.WB.MinimumSize = new System.Drawing.Size(20, 20);
+            this.WB.Name = "WB";
+            this.WB.Size = new System.Drawing.Size(933, 556);
+            this.WB.TabIndex = 0;
             // 
             // Handsome2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 556);
+            this.Controls.Add(this.WB);
             this.Name = "Handsome2";
             this.Text = "Handsome2";
             this.Load += new System.EventHandler(this.Handsome2_Load);
@@ -43,6 +54,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.WebBrowser WB;
     }
 }
 

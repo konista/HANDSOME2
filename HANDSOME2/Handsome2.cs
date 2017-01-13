@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace HANDSOME2
 {
+    [System.Runtime.InteropServices.ComVisible(true)]
     public partial class Handsome2 : Form
     {
         public Handsome2()
@@ -17,14 +18,17 @@ namespace HANDSOME2
             InitializeComponent();
         }
 
-        private void Handsome2_Load(object sender, EventArgs e)
+        public void LoadMod(string type)
         {
-            LoadMod();
+            string mod = "";
+            HANDSOME2.MODULE.MODLoader ml = new MODULE.MODLoader();
+            ml.Load(mod);
         }
 
-        private void LoadMod()
+        private void Handsome2_Load(object sender, EventArgs e)
         {
-
+            WB.ObjectForScripting = this;
+            WB.Navigate(Application.StartupPath + "..\\..\\..\\PAGES/Home.html");
         }
     }
 }

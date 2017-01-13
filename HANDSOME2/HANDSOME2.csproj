@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,7 @@
     <Compile Include="Handsome2.Designer.cs">
       <DependentUpon>Handsome2.cs</DependentUpon>
     </Compile>
+    <Compile Include="MODULE\MODLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Handsome2.resx">
@@ -80,8 +82,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="conf\" />
-    <Folder Include="module\" />
+    <Folder Include="MODS\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PAGES\Home.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

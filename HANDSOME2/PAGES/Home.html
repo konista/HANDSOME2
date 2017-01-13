@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style type="text/css">
+        #Select1 {
+            width: 177px;
+            height: 51px;
+        }
+        #Select_MOD {
+            width: 162px;
+        }
+    </style>
+    <script type="text/javascript">
+    function loadmod() {
+        var type = Select_MOD.item(Select_MOD.selectedIndex).value;
+        window.external.LoadMod(type);
+    }
+</script>
+</head>
+<body>
+    <select id="Select_MOD" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: absolute; top: 15px; left: 15px; width: 90px;" name="D1">
+        <option value="math">数学</option>
+        <option value="chinese">语文</option>
+        <option value="english">英语</option>
+    </select>
+    <input id="Button" type="button" value="确定" onclick="loadmod()" style="position: relative; top: 0px; left: 100px" />
+    
+</body>
+
+</html>

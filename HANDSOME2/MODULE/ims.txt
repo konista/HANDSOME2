@@ -1,0 +1,43 @@
+public struct Var
+{
+    public string name {get; set; }
+    public string type {get; set; }
+    public string max {get; set; }
+    public string min {get; set; }
+}
+public struct Subject
+{
+    public string name {get; set; }
+    public string template {get; set; }
+    public List<Var> vars {get; set; }
+    public List<string> answer {get; set; }
+    public int empty_num {get; set; }
+    public List<List<string>> conditions {get; set; }
+    public string assert {get; set; }
+    public int timeout {get; set; }
+}
+public Dictionary<string,Subject> ds = new Dictionary<string,Subject>();
+public ModLoader(string type)
+{
+    try
+    {
+        XmlDocument xd = new XmlDocument();
+        XmlReaderSettings settings = new XmlReaderSettings();
+        settings.IgnoreComments = true;
+        XmlReader reader = 
+        XmlReader.Create(System.AppDomain.CurrentDomain.BaseDirectory + type + ".xml");
+        xd.Load(reader);
+        Parse(xd);
+    }
+    catch
+    {}
+}
+
+private void Parse(XmlDocument doc)
+{
+    XmlNode root = doc.SelectSingleNode("SUBJECTS");
+    XmlNodeList xns = root.ChildNodes;
+    foreach (XmlNode xn in xns)
+    {
+        if (xn.Name != "SUBJECT") { continue; }
+        Subject s = ParseSubject(xn);

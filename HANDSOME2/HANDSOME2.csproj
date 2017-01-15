@@ -53,7 +53,8 @@
     <Compile Include="Handsome2.Designer.cs">
       <DependentUpon>Handsome2.cs</DependentUpon>
     </Compile>
-    <Compile Include="MODULE\MODLoader.cs" />
+    <Compile Include="MODULE\ModLoader.cs" />
+    <Compile Include="MODULE\SubjectCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Handsome2.resx">
@@ -83,6 +84,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="MOD\math.xml" />
     <Content Include="PAGES\Home.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

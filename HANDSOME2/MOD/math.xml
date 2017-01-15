@@ -1,0 +1,34 @@
+<SUBJECTSS>
+  <SUBJECT name="加法计算题1">
+    <TEMPLATE>${X}+${Y}=${S}</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="0" max="100">X</VAR>
+      <VAR type="int" min="0" max="100">Y</VAR>
+      <VAR type="int" min="0" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}!=null,${S}!=null,${S}>=${X}</CONDITION>
+      <CONDITION>${Y}!=null,${S}!=null,${S}>=${Y}</CONDITION>
+    </CONDITIONS>
+    <ANSWER empty_num="1">X|Y|S</ANSWER>
+    <ASSERT>${X}+${Y}==${S}</ASSERT>
+    <TIMEOUT>10</TIMEOUT>
+  </SUBJECT>
+  <SUBJECT name="加法计算题2">
+    <TEMPLATE>${X}+${Y}+${Z}=${S}</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="0" max="100">X</VAR>
+      <VAR type="int" min="0" max="100">Y</VAR>
+      <VAR type="int" min="0" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}!=null,${Y}!=null,${S}!=null,${S}>=${X}+${y}</CONDITION>
+      <CONDITION>${X}!=null,${Z}!=null,${S}!=null,${S}>=${X}+${Z}</CONDITION>
+      <CONDITION>${X}!=null,${Y}!=null,${S}!=null,${S}>=${Y}+${y}</CONDITION>
+      
+    </CONDITIONS>
+    <ANSWER empty_num="1">X|Y|Z|S</ANSWER>
+    <ASSERT>${X}+${Y}==${S}</ASSERT>
+    <TIMEOUT>10</TIMEOUT>
+  </SUBJECT>
+</SUBJECTSS>

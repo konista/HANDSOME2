@@ -81,9 +81,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MODS\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="PAGES\Home.html" />
   </ItemGroup>

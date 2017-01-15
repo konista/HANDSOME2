@@ -1,4 +1,5 @@
-<SUBJECTSS>
+<?xml version="1.0" encoding="utf-8" ?>
+<SUBJECTS>
   <SUBJECT name="加法计算题1">
     <TEMPLATE>${X}+${Y}=${S}</TEMPLATE>
     <VARS>
@@ -47,4 +48,4 @@
     <ASSERT>${X}-${Y}==${S}</ASSERT>
     <TIMEOUT>10</TIMEOUT>
   </SUBJECT>
-</SUBJECTSS>
+</SUBJECTS>

@@ -4,29 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using static HANDSOME2.MODULE.UserDefine;
 
 namespace HANDSOME2.MODULE
 {
     class ModLoader
     {
-        public struct Var
-        {
-            public string name { get; set; }
-            public string type { get; set; }
-            public string max { get; set; }
-            public string min { get; set; }
-        }
-        public struct Subject
-        {
-            public string name { get; set; }
-            public string template { get; set; }
-            public List<Var> vars { get; set; }
-            public List<string> answer { get; set; }
-            public int empty_num { get; set; }
-            public List<List<string>> conditions { get; set; }
-            public string assert { get; set; }
-            public int timeout { get; set; }
-        }
         public Dictionary<string, Subject> ds = new Dictionary<string, Subject>();
         public ModLoader(string type)
         {
@@ -34,11 +17,12 @@ namespace HANDSOME2.MODULE
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.IgnoreComments = true;
-                XmlReader reader = XmlReader.Create(System.AppDomain.CurrentDomain.BaseDirectory + type + ".xml", settings);
+                XmlReader reader = XmlReader.Create(System.AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\MOD\" + type + ".xml", settings);
                 XmlDocument xd = new XmlDocument();
                 xd.Load(reader);
                 reader.Close();
                 Parse(xd);
+                reader.Close();
             }
             catch
             { }
@@ -83,7 +67,7 @@ namespace HANDSOME2.MODULE
                             s.empty_num = GetEmptyNum(xn);
                             break;
                         }
-                    case "CONDITION":
+                    case "CONDITIONS":
                         {
                             s.conditions = GetConditions(xn);
                             break;

@@ -3,33 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static HANDSOME2.MODULE.UserDefine;
 namespace HANDSOME2.MODULE
 {
     class SubjectCreator
     {
-        public Dictionary<string, ModLoader.Subject> ds;
+        public Dictionary<string, Subject> ds;
         public SubjectCreator(string type)
         {
             ModLoader ml = new ModLoader(type);
             ds = ml.ds;
         }
-        public void CreateSubject(string sbj_name)
+        public string CreateSubject(string sbj_name)
         {
-            ModLoader.Subject s = ds[sbj_name];
+            Subject s = UserDefine.DeepClone<Subject>(ds[sbj_name]);
             string ret = s.template;
+            s = DefineAnswer(s);
             Dictionary<string, object> vars = MakeVars(s);
             if (Assert(vars, s.conditions))
             {
-
+                ret = RepaceVar(vars, ret);
             }
             else
-            { CreateSubject(sbj_name); }
+            { return CreateSubject(sbj_name); }
+            return ret;
         }
-        private Dictionary<string,object> MakeVars(ModLoader.Subject s)
+        private Subject DefineAnswer(Subject s)
+        {
+            int empty_num = s.empty_num;
+            while (s.answer.Count > empty_num)
+            {
+                int delete_index = RandomInt("0", s.answer.Count.ToString());
+                foreach (Var var in s.vars)
+                {
+                    if (var.name == s.answer[delete_index])
+                    {
+                        s.vars.Remove(var);
+                        break;
+                    }
+                }
+                s.answer.RemoveAt(delete_index);
+            }
+            return s;
+        }
+        private Dictionary<string,object> MakeVars(Subject s)
         {
             Dictionary<string, object> vars = new Dictionary<string, object>();
-            foreach (ModLoader.Var var in s.vars)
+            foreach (Var var in s.vars)
             {
                 switch (var.type)
                 {
@@ -46,8 +66,18 @@ namespace HANDSOME2.MODULE
         }
         private bool Assert(Dictionary<string,object> vars, List<List<string>> conditions)
         {
-            bool ret = false;
-            return ret;
+            foreach (List<string> condition in conditions)
+            {
+                bool ret = true;
+                foreach (string con in condition)
+                {
+                    string con_str = RepaceVar(vars, con);
+                    ret = ret && (bool)JScript.JScriptRun("condition_assert", new object[] { con_str });
+                    if (!ret) { break; }
+                }
+                if (ret) { return true; }
+            }
+            return false;
         }
         private int RandomInt(string min, string max)
         {
@@ -55,6 +85,19 @@ namespace HANDSOME2.MODULE
             int imax = int.Parse(max);
             Random r = new Random();
             return r.Next(imin, imax);
+        }
+        private string RepaceVar(Dictionary<string, object> vars, string exp)
+        {
+            string s = exp;
+            foreach (KeyValuePair<string, object> kv in vars)
+            {
+                string var_str = "${" + kv.Key + "}";
+                if (s.Contains(var_str))
+                {
+                    s = s.Replace(var_str, kv.Value.ToString());
+                }
+            }
+            return s;
         }
     }
 }

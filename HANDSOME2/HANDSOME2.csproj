@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.JScript" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Services" />
@@ -53,8 +54,11 @@
     <Compile Include="Handsome2.Designer.cs">
       <DependentUpon>Handsome2.cs</DependentUpon>
     </Compile>
+    <Compile Include="MODULE\CSharp.cs" />
+    <Compile Include="MODULE\JScript.cs" />
     <Compile Include="MODULE\ModLoader.cs" />
     <Compile Include="MODULE\SubjectCreator.cs" />
+    <Compile Include="MODULE\UserDefine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Handsome2.resx">

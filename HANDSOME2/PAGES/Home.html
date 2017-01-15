@@ -15,18 +15,37 @@
     </style>
     <script type="text/javascript">
     function loadmod() {
-        var type = Select_MOD.item(Select_MOD.selectedIndex).value;
+        var type = Select_Mod.item(Select_Mod.selectedIndex).value;
         window.external.LoadMod(type);
+        loadsubject();
+    }
+    function loadsubject() {
+        for (var i = 0; i < arguments.length; i++) {
+            Select_Subject.add(new Option(arguments[i], arguments[i]));
+        }
+    }
+    function createsubject() {
+        var subject = Select_Subject.item(Select_Subject.selectedIndex).value;
+        var txt = window.external.CreateSubject(subject);
+        alert(txt);
     }
 </script>
 </head>
 <body>
-    <select id="Select_MOD" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: absolute; top: 15px; left: 15px; width: 90px;" name="D1">
-        <option value="math">数学</option>
-        <option value="chinese">语文</option>
-        <option value="english">英语</option>
-    </select>
-    <input id="Button" type="button" value="确定" onclick="loadmod()" style="position: relative; top: 0px; left: 100px" />
+    <div>
+        <select id="Select_Mod" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 90px;">
+            <option value="math">数学</option>
+    <!--        <option value="chinese">语文</option>
+            <option value="english">英语</option>-->
+        </select>
+        <input id="Button_Mod" type="button" value="确定" onclick="loadmod()" style="position: relative; top: 15px; left: 100px" />
+    </div>
+    <div>
+        <select id="Select_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 50px; left: 15px; width: 200px;">
+            <option></option>
+        </select>
+        <input id="Button_Subject" type="button" value="确定" onclick="createsubject()" style="position: relative; top: 50px; left: 100px" />
+    </div>
     
 </body>
 

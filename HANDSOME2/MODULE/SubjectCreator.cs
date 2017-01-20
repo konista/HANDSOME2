@@ -3,75 +3,88 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HANDSOME2.MODULE.UserDefine;
+using System.Security.Cryptography;
 namespace HANDSOME2.MODULE
 {
     class SubjectCreator
     {
-        public Dictionary<string, Subject> ds;
+        private static RNGCryptoServiceProvider rngp = new RNGCryptoServiceProvider();
+        private static byte[] rb = new byte[4];
+        public Dictionary<string, UserDefine.Subject> ds;
         public SubjectCreator(string type)
         {
             ModLoader ml = new ModLoader(type);
             ds = ml.ds;
         }
-        public string CreateSubject(string sbj_name)
+        public UserDefine.Subject CreateSubject(string sbj_name)
         {
-            Subject s = UserDefine.DeepClone<Subject>(ds[sbj_name]);
-            string ret = s.template;
-            s = DefineAnswer(s);
-            Dictionary<string, object> vars = MakeVars(s);
-            if (Assert(vars, s.conditions))
+            UserDefine.Subject s = UserDefine.DeepClone<UserDefine.Subject>(ds[sbj_name]);
+            DefineEmpty(s);
+            MakeVars(s);
+            if (AssertCondition(s))
             {
-                ret = RepaceVar(vars, ret);
+                s = MakePuzzle(s);
             }
             else
             { return CreateSubject(sbj_name); }
-            return ret;
-        }
-        private Subject DefineAnswer(Subject s)
-        {
-            int empty_num = s.empty_num;
-            while (s.answer.Count > empty_num)
-            {
-                int delete_index = RandomInt("0", s.answer.Count.ToString());
-                foreach (Var var in s.vars)
-                {
-                    if (var.name == s.answer[delete_index])
-                    {
-                        s.vars.Remove(var);
-                        break;
-                    }
-                }
-                s.answer.RemoveAt(delete_index);
-            }
             return s;
         }
-        private Dictionary<string,object> MakeVars(Subject s)
+        private void DefineEmpty(UserDefine.Subject s)
         {
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            foreach (Var var in s.vars)
+            int empty_num = s.empty_num;
+            while (s.answers.Count > empty_num)
             {
-                switch (var.type)
+                int delete_index = RandomInt("0", s.answers.Count.ToString());
+                UserDefine.Var var = s.vars.First(e => e.name == s.answers[delete_index]);
+                if ((object)var != null)
                 {
-                    case "int":
-                        {
-                            vars.Add(var.name, RandomInt(var.min, var.max));
-                            break;
-                        }
-                    default:
-                        { break; }
+                    if (!var.isanswer) { s.answers.RemoveAt(delete_index); }
                 }
             }
-            return vars;
+            foreach (string answer in s.answers)
+            {
+                UserDefine.Var var = s.vars.First(e => e.name == answer);
+                s.vars.Remove(var);
+                var.isanswer = true;
+                s.vars.Add(var);
+            }
         }
-        private bool Assert(Dictionary<string,object> vars, List<List<string>> conditions)
+        private void MakeVars(UserDefine.Subject s)
         {
-            foreach (List<string> condition in conditions)
+            for (int i = 0; i < s.vars.Count; i++)
+            {
+                UserDefine.Var var = s.vars[i];
+                if (var.isanswer)
+                {
+                    var.value = UserDefine.MakeInputHTML("int", "text", var.name, "width: 40px; text-align: center;");
+                }
+                else
+                {
+                    switch (var.type)
+                    {
+                        case "int":
+                            {
+                                if (s.vars[i].value == "")
+                                {
+                                    var.value = RandomInt(var.min, var.max).ToString();
+                                }
+                                break;
+                            }
+                        default:
+                            { break; }
+                    }
+                }
+                s.vars[i] = var;
+            }
+        }
+        private bool AssertCondition(UserDefine.Subject s)
+        {
+            foreach (List<string> condition in s.conditions)
             {
                 bool ret = true;
                 foreach (string con in condition)
                 {
-                    string con_str = RepaceVar(vars, con);
+                    string con_str = RepaceVarAssert(s.vars, con);
                     ret = ret && (bool)JScript.JScriptRun("condition_assert", new object[] { con_str });
                     if (!ret) { break; }
                 }
@@ -83,19 +96,36 @@ namespace HANDSOME2.MODULE
         {
             int imin = int.Parse(min);
             int imax = int.Parse(max);
-            Random r = new Random();
+            rngp.GetBytes(rb);
+            int value = BitConverter.ToInt32(rb, 0);
+            if (value < 0) { value = -value; }
+            Random r = new Random(value);
             return r.Next(imin, imax);
         }
-        private string RepaceVar(Dictionary<string, object> vars, string exp)
+        private UserDefine.Subject MakePuzzle(UserDefine.Subject s)
+        {
+            string exp = s.template;
+            string assert = s.assert;
+            foreach (UserDefine.Var var in s.vars)
+            {
+                string var_str = "${" + var.name + "}";
+                exp = exp.Replace(var_str, var.value);
+                assert = assert.Replace(var_str, var.value);
+            }
+            s.content = exp;
+            s.assert = assert;
+            return s;
+        }
+        private string RepaceVarAssert(List<UserDefine.Var> vars, string exp)
         {
             string s = exp;
-            foreach (KeyValuePair<string, object> kv in vars)
+            foreach (UserDefine.Var var in vars)
             {
-                string var_str = "${" + kv.Key + "}";
-                if (s.Contains(var_str))
-                {
-                    s = s.Replace(var_str, kv.Value.ToString());
-                }
+                string var_str = "${" + var.name + "}";
+                if (var.isanswer)
+                { s = s.Replace(var_str, "null"); }
+                else
+                { s = s.Replace(var_str, var.value); }
             }
             return s;
         }

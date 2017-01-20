@@ -90,6 +90,7 @@
   <ItemGroup>
     <Content Include="MOD\math.xml" />
     <Content Include="PAGES\Home.html" />
+    <Content Include="PAGES\Subject.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

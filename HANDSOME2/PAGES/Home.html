@@ -14,26 +14,57 @@
         }
     </style>
     <script type="text/javascript">
-    function loadmod() {
-        var type = Select_Mod.item(Select_Mod.selectedIndex).value;
-        window.external.LoadMod(type);
-        loadsubject();
-    }
-    function loadsubject() {
-        for (var i = 0; i < arguments.length; i++) {
-            Select_Subject.add(new Option(arguments[i], arguments[i]));
+        function loadmod() {
+            var type = Select_Mod.item(Select_Mod.selectedIndex).value;
+            window.external.LoadMod(type);
+            loadsubject();
         }
-    }
-    function createsubject() {
-        var subject = Select_Subject.item(Select_Subject.selectedIndex).value;
-        var txt = window.external.CreateSubject(subject);
-        alert(txt);
-    }
+        function loadsubject() {
+            for (var i = 0; i < arguments.length; i++) {
+                Select_Subject.add(new Option(arguments[i], arguments[i]));
+            }
+            Select_Subject.selectedIndex = 0;
+        }
+        function addsubject()
+        {
+            var subject = Select_Subject.item(Select_Subject.selectedIndex).value;
+            if (subject == "") { return; }
+            var num = Text_Count.value;
+            if (num == "") { return; }
+            num = parseInt(num);
+            var row = Table_Subject.insertRow(Table_Subject.rows.length);
+            var index = row.rowIndex.toString();
+            row.id = "tr" + index;
+            var col0 = row.insertCell(0);
+            col0.innerText = subject;
+            var col1 = row.insertCell(1);
+            col1.innerText = num;
+            var col2 = row.insertCell(2);
+            col2.innerHTML = '<a href="javascript:;" onlick="deletesubject(\'' + row.id + '\')">删除</a>';
+        }
+        function deletesubject(trid)
+        {
+            var index = document.getElementById(trid).rowIndex;
+            Table_Subject.deleteRow(index);
+        }
+        function gotosubject()
+        {
+            savesubject();
+            window.external.GoToSubject();
+        }
+        function savesubject()
+        {
+            var rows = Table_Subject.rows;
+            for (var i = 1; i < rows.length; i++)
+            {
+                window.external.SaveSubject(rows[i].cells[0].innerText, rows[i].cells[1].innerText);
+            }
+        }
 </script>
 </head>
 <body>
     <div>
-        <select id="Select_Mod" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 90px;">
+        <select id="Select_Mod" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 200px;">
             <option value="math">数学</option>
     <!--        <option value="chinese">语文</option>
             <option value="english">英语</option>-->
@@ -41,10 +72,22 @@
         <input id="Button_Mod" type="button" value="确定" onclick="loadmod()" style="position: relative; top: 15px; left: 100px" />
     </div>
     <div>
-        <select id="Select_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 50px; left: 15px; width: 200px;">
-            <option></option>
+        <select id="Select_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 200px;">
         </select>
-        <input id="Button_Subject" type="button" value="确定" onclick="createsubject()" style="position: relative; top: 50px; left: 100px" />
+        <input id="Text_Count" type="text" style="position: relative; top:15px; left: 30px; width:15px" onkeyup="this.value=this.value.replace(/\D/g,'')" onchange="this.value=this.value.replace(/\D/g,'')" />
+        <span style="position: relative; top: -5px; left: 265px; width: 15px; float: left;">个</span>
+        <input id="Butten_Add" type="button" value="添加" onclick="addsubject()" style="position: relative; top: 15px; left: 77px" />
+    </div>
+    <hr />
+    <div style="position: relative; height: 216px; font-family: 宋体, Arial, Helvetica, sans-serif; font-weight: bold; text-align: left; text-indent: 20px; vertical-align: top">
+        <table id="Table_Subject" style="width: 100%; text-align: center;" border="1">
+            <tr>
+                <td style=""width: 80%;">题型</td>
+                <td style=""width: 10%;">题目数量</td>
+                <td style=""width: 10%;">删除</td>
+            </tr>
+        </table>
+        <input id="Button_Subject" type="button" value="开始作答" onclick="gotosubject()" style="position: relative; top: 50px; left: 700px" />
     </div>
     
 </body>

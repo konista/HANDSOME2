@@ -7,11 +7,12 @@
       <VAR type="int" min="0" max="100">Y</VAR>
       <VAR type="int" min="0" max="200">S</VAR>
     </VARS>
-    <CONDITIONS>
-      <CONDITION>${X}!=null,${S}!=null,${S}>=${X}</CONDITION>
-      <CONDITION>${Y}!=null,${S}!=null,${S}>=${Y}</CONDITION>
-    </CONDITIONS>
     <ANSWER empty_num="1">X|Y|S</ANSWER>
+    <CONDITIONS>
+      <CONDITION>${X}!=null,${S}!=null,${S}>=${X},${X}+100>=${S}</CONDITION>
+      <CONDITION>${Y}!=null,${S}!=null,${S}>=${Y},${Y}+100>=${S}</CONDITION>
+      <CONDITION>${S}==null</CONDITION>
+    </CONDITIONS>
     <ASSERT>${X}+${Y}==${S}</ASSERT>
     <TIMEOUT>10</TIMEOUT>
   </SUBJECT>
@@ -23,12 +24,13 @@
       <VAR type="int" min="0" max="100">Z</VAR>
       <VAR type="int" min="0" max="300">S</VAR>
     </VARS>
+    <ANSWER empty_num="1">X|Y|Z|S</ANSWER>
     <CONDITIONS>
-      <CONDITION>${X}!=null,${Y}!=null,${S}!=null,${S}>=${X}+${y}</CONDITION>
+      <CONDITION>${X}!=null,${Y}!=null,${S}!=null,${S}>=${X}+${Y}</CONDITION>
       <CONDITION>${X}!=null,${Z}!=null,${S}!=null,${S}>=${X}+${Z}</CONDITION>
       <CONDITION>${Y}!=null,${Z}!=null,${S}!=null,${S}>=${Y}+${Z}</CONDITION>
+      <CONDITION>${S}==null</CONDITION>
     </CONDITIONS>
-    <ANSWER empty_num="1">X|Y|Z|S</ANSWER>
     <ASSERT>${X}+${Y}+${Z}==${S}</ASSERT>
     <TIMEOUT>15</TIMEOUT>
   </SUBJECT>
@@ -40,9 +42,10 @@
       <VAR type="int" min="0" max="100">S</VAR>
     </VARS>
     <CONDITIONS>
-      <CONDITION>${X}!=null,${Y}!=null,${X}>=${y}</CONDITION>
+      <CONDITION>${X}!=null,${Y}!=null,${X}>=${Y}</CONDITION>
       <CONDITION>${X}!=null,${S}!=null,${X}>=${S}</CONDITION>
       <CONDITION>${Y}!=null,${S}!=null,100>=${Y}+${S}</CONDITION>
+      <CONDITION>${S}==null</CONDITION>
     </CONDITIONS>
     <ANSWER empty_num="1">X|Y|S</ANSWER>
     <ASSERT>${X}-${Y}==${S}</ASSERT>

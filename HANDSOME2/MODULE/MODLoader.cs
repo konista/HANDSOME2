@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using static HANDSOME2.MODULE.UserDefine;
 
 namespace HANDSOME2.MODULE
 {
     class ModLoader
     {
-        public Dictionary<string, Subject> ds = new Dictionary<string, Subject>();
+        public Dictionary<string, UserDefine.Subject> ds = new Dictionary<string, UserDefine.Subject>();
         public ModLoader(string type)
         {
             try
@@ -37,14 +36,14 @@ namespace HANDSOME2.MODULE
             foreach (XmlNode xn in xns)
             {
                 if (xn.Name != "SUBJECT") { continue; }
-                Subject s = ParseSubject(xn);
+                UserDefine.Subject s = ParseSubject(xn);
                 ds.Add(s.name, s);
             }
         }
 
-        private Subject ParseSubject(XmlNode subject)
+        private UserDefine.Subject ParseSubject(XmlNode subject)
         {
-            Subject s = new Subject();
+            UserDefine.Subject s = new UserDefine.Subject();
             s.name = GetSubjectName(subject);
             XmlNodeList xnl = subject.ChildNodes;
             foreach (XmlNode xn in xnl)
@@ -63,7 +62,7 @@ namespace HANDSOME2.MODULE
                         }
                     case "ANSWER":
                         {
-                            s.answer = GetAnswer(xn);
+                            s.answers = GetAnswer(xn);
                             s.empty_num = GetEmptyNum(xn);
                             break;
                         }
@@ -96,25 +95,28 @@ namespace HANDSOME2.MODULE
 
         private string GetTemplate(XmlNode template)
         {
-            return template.InnerText;
+            return template.InnerText.ToUpper();
         }
 
-        private List<Var> GetVars(XmlNode vars)
+        private List<UserDefine.Var> GetVars(XmlNode vars)
         {
-            List<Var> lv = new List<Var>();
+            List<UserDefine.Var> lv = new List<UserDefine.Var>();
             XmlNodeList xnl = vars.ChildNodes;
             foreach (XmlNode xn in xnl)
             {
                 if (xn.Name != "VAR") { continue; }
-                Var var = new Var();
+                UserDefine.Var var = new UserDefine.Var();
                 var.type = GetAttribute(xn, "type");
                 switch (var.type)
                 {
                     case "int":
                         {
-                            var.name = xn.InnerText;
+                            var.name = xn.InnerText.ToUpper();
                             var.max = GetAttribute(xn, "max");
                             var.min = GetAttribute(xn, "min");
+                            var.value = GetAttribute(xn, "value");
+                            string isanswer = GetAttribute(xn, "isanswer");
+                            var.isanswer = isanswer == "" ? false : bool.Parse(isanswer);
                             break;
                         }
                     default:
@@ -127,7 +129,7 @@ namespace HANDSOME2.MODULE
 
         private List<string> GetAnswer(XmlNode answer)
         {
-            return answer.InnerText.Split(new char[1] { '|' }).ToList<string>();
+            return answer.InnerText.ToUpper().Split(new char[1] { '|' }).ToList<string>();
         }
 
         private int GetEmptyNum(XmlNode answer)
@@ -142,14 +144,14 @@ namespace HANDSOME2.MODULE
             foreach (XmlNode xn in xnl)
             {
                 if (xn.Name != "CONDITION") { continue; }
-                ls.Add(xn.InnerText.Split(new char[1] { ',' }).ToList<string>());
+                ls.Add(xn.InnerText.ToUpper().Split(new char[1] { ',' }).ToList<string>());
             }
             return ls;
         }
 
         private string GetAssert(XmlNode assert)
         {
-            return assert.InnerText;
+            return assert.InnerText.ToUpper();
         }
 
         private int GetTimeout(XmlNode timeout)

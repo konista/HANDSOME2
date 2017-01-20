@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        var cur_index = 0;
+        var total_num = window.external.GetPuzzleCount();
+        function gohome()
+        {
+            if (event.srcElement.outerText == "重新选题")
+            {
+                event.returnValue = confirm("当前题目和成绩将丢失，你确认要重新选题吗？");
+                if (event.returnValue)
+                {
+                    window.external.GoHome();
+                }
+            }
+        }
+        function showpuzzle(index)
+        {
+            var puzzle = window.external.ShowPazzle(index);
+            alert(puzzle);
+            Div_Subject.innerHTML = puzzle;
+        }
+        function saveanswer(index)
+        {
+            var inputs = Div_Subject.getElementsByTagName("input");
+            var count = 0;
+            for (var i = 0; i < inputs.length; i++)
+            {
+                if (inputs[i].type == "text")
+                {
+                    window.external.SaveAnswer(index, inputs[i].id, inputs[i].value);
+                    count++;
+                }
+            }
+        }
+        function shownextpuzzle()
+        {
+            if (cur_index < total_num - 1)
+            {
+                saveanswer(cur_index);
+                cur_index += 1;
+                showpuzzle(cur_index);
+            }
+            else
+            {
+                alert("已是最后一题")
+            }
+        }
+        function showprevpuzzle()
+        {
+            if (cur_index > 0)
+            {
+                saveanswer(cur_index);
+                cur_index -= 1;
+                showpuzzle(cur_index);
+            }
+            else {
+                alert("已是第一题")
+            }
+        }
+        function commit()
+        {
+
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <a href="javascript:;" onclick="gohome()">重新选题</a>
+        <hr />
+        <div id="Div_Index"></div>
+        <div id="Div_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; text-indent: 40px; height: 25px"></div>
+        <div id="Div_Commit" style="text-align: right">
+            <input id="Butten_Prev" type="button" value="上一题" onclick="showprevpuzzle()" />
+            <input id="Butten_Next" type="button" value="下一题" onclick="shownextpuzzle()" />
+            <input id="Butten_Commit" type="button" value="交卷" onclick="commit()" />
+        </div>
+    </div>
+</body>
+    <script type="text/javascript">
+        showpuzzle(0)
+    </script>
+</html>

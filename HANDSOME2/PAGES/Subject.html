@@ -87,11 +87,24 @@
                 }
             }
         }
+        function autocommit()
+        {
+            saveanswer(cur_index);
+            assertallanswer();
+            window.external.GoToJudge();
+        }
+        function setremindtime(time)
+        {
+            Time_Remind.innerText = "剩余时间：" + time;
+        }
     </script>
 </head>
 <body>
     <div>
         <a href="javascript:;" onclick="gohome()">重新选题</a>
+        <span id="Time_Remind" style="text-align: right; position: relative; float: right; font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold;">剩余时间：00:00</span>
+        <br />
+        <br />
         <hr />
         <div id="Div_Index"></div>
         <div id="Div_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; height: 25px"></div>

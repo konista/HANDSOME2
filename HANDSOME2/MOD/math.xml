@@ -86,4 +86,87 @@
     <ASSERT>${X}-${Y}-${Z}==${S}</ASSERT>
     <TIMEOUT>10</TIMEOUT>
   </SUBJECT>
+  <SUBJECT name="站队题1">
+    <TEMPLATE>一共有${S}个小朋友站队，小明后面有${X}个人，小明是第${Y}名。</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="1" max="100">X</VAR>
+      <VAR type="int" min="1" max="100">Y</VAR>
+      <VAR type="int" min="1" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}==null,${S}>=${Y}</CONDITION>
+      <CONDITION>${S}==null,100>=${X}+${Y}</CONDITION>
+      <CONDITION>${Y}==null,${S}>${X}</CONDITION>
+    </CONDITIONS>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}-${Y}</ANSWER>
+      <ANSWER name="Y">${S}-${X}</ANSWER>
+      <ANSWER name="S">${X}+${Y}</ANSWER>
+    </ANSWERS>
+    <ASSERT>${X}+${Y}==${S}</ASSERT>
+    <TIMEOUT>15</TIMEOUT>
+  </SUBJECT>
+  <SUBJECT name="站队题2">
+    <TEMPLATE>一共有${S}个小朋友站队，小明是第${X}名，小红在小明后面，他们之间有${Y}个人，小红是倒数第${Z}名。</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="1" max="100">X</VAR>
+      <VAR type="int" min="1" max="100">Y</VAR>
+      <VAR type="int" min="1" max="100">Z</VAR>
+      <VAR type="int" min="1" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}==null,${S}>${Y}+${Z}</CONDITION>
+      <CONDITION>${Y}==null,${S}>${X}+${Z}</CONDITION>
+      <CONDITION>${Z}==null,${S}>${X}+${Y}</CONDITION>
+      <CONDITION>${S}==null,100>=${X}+${Y}+${Z}</CONDITION>
+    </CONDITIONS>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}-${Y}-${Z}</ANSWER>
+      <ANSWER name="Y">${S}-${X}-${Z}</ANSWER>
+      <ANSWER name="Z">${S}-${X}-${Y}</ANSWER>
+      <ANSWER name="S">${X}+${Y}+${Z}</ANSWER>
+    </ANSWERS>
+    <ASSERT>${X}+${Y}+${Z}==${S}</ASSERT>
+    <TIMEOUT>20</TIMEOUT>
+  </SUBJECT>
+  <SUBJECT name="站队题3">
+    <TEMPLATE>一共有${S}个小朋友站队，小明后面比前面多${X}人，小明是第${Y}名。</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="1" max="100">X</VAR>
+      <VAR type="int" min="1" max="100">Y</VAR>
+      <VAR type="int" min="1" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}==null,${S}+1>${Y}*2</CONDITION>
+      <CONDITION>${Y}==null,${S}>${X},((${S}-${X}+1)%2)==0</CONDITION>
+      <CONDITION>${S}==null,101>=${X}+${Y}*2</CONDITION>
+    </CONDITIONS>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}-${Y}*2+1</ANSWER>
+      <ANSWER name="Y">(${S}-${X}+1)/2</ANSWER>
+      <ANSWER name="S">${X}+${Y}*2-1</ANSWER>
+    </ANSWERS>
+    <ASSERT>${X}+${Y}*2==${S}+1</ASSERT>
+    <TIMEOUT>30</TIMEOUT>
+  </SUBJECT>
+  <SUBJECT name="站队题4">
+    <TEMPLATE>一共有${S}个小朋友站队，小明后面比前面少${X}人，小明是第${Y}名。</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="1" max="100">X</VAR>
+      <VAR type="int" min="1" max="100">Y</VAR>
+      <VAR type="int" min="1" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}==null,${Y}*2>${S}+1,${S}>=${Y}</CONDITION>
+      <CONDITION>${Y}==null,200>${S}+${X}+1,((${S}+${X}+1)%2)==0,${S}>=${Y}</CONDITION>
+      <CONDITION>${S}==null,${Y}>${X}+1,100>=${Y}*2-1-${X}</CONDITION>
+    </CONDITIONS>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${Y}*2-1-${S}</ANSWER>
+      <ANSWER name="Y">(${S}+${X}+1)/2</ANSWER>
+      <ANSWER name="S">${Y}*2-1-${X}</ANSWER>
+    </ANSWERS>
+    <ASSERT>${Y}*2-1==${X}+${S}</ASSERT>
+    <TIMEOUT>30</TIMEOUT>
+  </SUBJECT>
 </SUBJECTS>

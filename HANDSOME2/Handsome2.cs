@@ -15,6 +15,8 @@ namespace HANDSOME2
     {
         private MODULE.SubjectCreator sc;
         private List<MODULE.UserDefine.Subject> ls = new List<MODULE.UserDefine.Subject>();
+        private int total_time = 0;
+        private DateTime time_end;
         public Handsome2()
         {
             InitializeComponent();
@@ -31,14 +33,20 @@ namespace HANDSOME2
         }
         public void GoHome()
         {
+            Timer_Count.Enabled = false;
+            ls.Clear();
+            total_time = 0;
             WB.Navigate(Application.StartupPath + @"\PAGES\Home.html");
         }
         public void GoToSubject()
         {
             WB.Navigate(Application.StartupPath + @"\PAGES\Subject.html");
+            time_end = DateTime.Now + new TimeSpan(0,0,total_time);
+            Timer_Count.Enabled = true;
         }
         public void GoToJudge()
         {
+            Timer_Count.Enabled = false;
             WB.Navigate(Application.StartupPath + @"\PAGES\Judge.html");
         }
         public void LoadMod(string type)
@@ -54,6 +62,7 @@ namespace HANDSOME2
             {
                 MODULE.UserDefine.Subject s = CreateSubject(subject);
                 ls.Add(s);
+                total_time += s.timeout;
             }
         }
         public int GetPuzzleCount()
@@ -124,6 +133,19 @@ namespace HANDSOME2
                 ret.Add(answer.value);
             }
             return string.Join(",", ret);
+        }
+
+        private void Timer_Count_Tick(object sender, EventArgs e)
+        {
+            TimeSpan ts = time_end - DateTime.Now;
+            if (ts.Ticks > 0)
+            {
+                WB.Document.InvokeScript("setremindtime", new string[1] { ts.Hours.ToString() + ":" + ts.Minutes.ToString() + ":" + ts.Seconds.ToString()});
+            }
+            else
+            {
+                WB.Document.InvokeScript("autocommit");
+            }
         }
     }
 }

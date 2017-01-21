@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.WB = new System.Windows.Forms.WebBrowser();
+            this.Timer_Count = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // WB
@@ -39,6 +41,11 @@
             this.WB.Name = "WB";
             this.WB.Size = new System.Drawing.Size(933, 556);
             this.WB.TabIndex = 0;
+            // 
+            // Timer_Count
+            // 
+            this.Timer_Count.Interval = 1000;
+            this.Timer_Count.Tick += new System.EventHandler(this.Timer_Count_Tick);
             // 
             // Handsome2
             // 
@@ -58,6 +65,7 @@
         #endregion
 
         private System.Windows.Forms.WebBrowser WB;
+        private System.Windows.Forms.Timer Timer_Count;
     }
 }
 

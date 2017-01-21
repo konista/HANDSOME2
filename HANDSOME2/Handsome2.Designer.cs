@@ -46,6 +46,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 556);
             this.Controls.Add(this.WB);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Handsome2";
             this.Text = "Handsome2";
             this.Load += new System.EventHandler(this.Handsome2_Load);

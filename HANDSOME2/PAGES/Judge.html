@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        var total_num = window.external.GetPuzzleCount();
+        var score_per_puzzle = 100 / parseFloat(total_num);
+        var total_score = 0;
+        function gohome() {
+            if (event.srcElement.outerText == "重新选题") {
+                event.returnValue = confirm("当前题目和成绩将丢失，你确认要重新选题吗？");
+                if (event.returnValue) {
+                    window.external.GoHome();
+                }
+            }
+        }
+        function showallresult()
+        {
+            for (var i = 0; i < total_num; i++)
+            {
+                window.external.ShowResult(i);
+            }
+            var row = document.getElementById("tr_score");
+            row.cells[4].innerText = total_score.toString();
+        }
+        function showresult(index, subject, text, answer, correct)
+        {
+            var row = Table_Judge.insertRow(index + 1);
+            row.id = "tr" + index.toString();
+            var col0 = row.insertCell(0);
+            col0.innerText = subject;
+            var col1 = row.insertCell(1);
+            col1.innerText = text;
+            var col2 = row.insertCell(2);
+            col2.innerText = answer;
+            var col3 = row.insertCell(3);
+            col3.innerHTML = '<a href="javascript:;" onclick="showanswer(' + index + ')">显示</a>';
+            var col4 = row.insertCell(4);
+            if (correct)
+            { 
+                col4.innerText = score_per_puzzle.toString(); 
+                total_score += score_per_puzzle;
+            }
+            else
+            { col4.innerText = "0"; }
+        }
+        function showanswer(index)
+        {
+            var trid = "tr" + index.toString();
+            var row = document.getElementById(trid);
+            row.cells[3].innerText = window.external.GetCorrectAnswer(index);
+        }
+    </script>
+</head>
+<body>
+    <div>
+    <a href="javascript:;" onclick="gohome()">重新选题</a>
+    </div>
+    <br />
+    <div style="height: auto; font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; text-align: center;">
+        
+        成绩单
+    </div>
+    <br />
+    <div style="height: auto; font-family: 宋体, Arial, Helvetica, sans-serif; font-weight: bold; ">
+        <table id="Table_Judge" style="border: thin solid #009933; width: 100%; text-align: center; right: 15px;" border="1">
+            <tr>
+                <td style="width: auto" >题型</td>
+                <td style="width: auto" >题目</td>
+                <td style="width: auto" >答案</td>
+                <td style="width: auto" >正确答案</td>
+                <td style="width: 10%"  >得分</td>
+            </tr>
+            <tr id="tr_score">
+                <td style="width: auto" ></td>
+                <td style="width: auto" ></td>
+                <td style="width: auto" ></td>
+                <td style="width: auto" ></td>
+                <td style="width: 10%"  ></td>
+            </tr>
+        </table>
+    </div>
+</body>
+    <script type="text/javascript">
+        showallresult();
+    </script>
+</html>

@@ -24,6 +24,7 @@ namespace HANDSOME2.MODULE
             if (AssertCondition(s))
             {
                 s = MakePuzzle(s);
+                s.correct = false;
             }
             else
             { return CreateSubject(sbj_name); }
@@ -35,15 +36,15 @@ namespace HANDSOME2.MODULE
             while (s.answers.Count > empty_num)
             {
                 int delete_index = RandomInt("0", s.answers.Count.ToString());
-                UserDefine.Var var = s.vars.First(e => e.name == s.answers[delete_index]);
+                UserDefine.Var var = s.vars.First(e => e.name == s.answers[delete_index].name);
                 if ((object)var != null)
                 {
                     if (!var.isanswer) { s.answers.RemoveAt(delete_index); }
                 }
             }
-            foreach (string answer in s.answers)
+            foreach (UserDefine.Answer answer in s.answers)
             {
-                UserDefine.Var var = s.vars.First(e => e.name == answer);
+                UserDefine.Var var = s.vars.First(e => e.name == answer.name);
                 s.vars.Remove(var);
                 var.isanswer = true;
                 s.vars.Add(var);
@@ -56,7 +57,7 @@ namespace HANDSOME2.MODULE
                 UserDefine.Var var = s.vars[i];
                 if (var.isanswer)
                 {
-                    var.value = UserDefine.MakeInputHTML("int", "text", var.name, "width: 40px; text-align: center;");
+                    var.value = "";
                 }
                 else
                 {
@@ -85,7 +86,7 @@ namespace HANDSOME2.MODULE
                 foreach (string con in condition)
                 {
                     string con_str = RepaceVarAssert(s.vars, con);
-                    ret = ret && (bool)JScript.JScriptRun("condition_assert", new object[] { con_str });
+                    ret = ret && (bool)JScript.JScriptRun("eval_expression", new object[] { con_str });
                     if (!ret) { break; }
                 }
                 if (ret) { return true; }
@@ -104,18 +105,38 @@ namespace HANDSOME2.MODULE
         }
         private UserDefine.Subject MakePuzzle(UserDefine.Subject s)
         {
-            string exp = s.template;
+            string content = s.template;
             string assert = s.assert;
+            string text = s.template;
             foreach (UserDefine.Var var in s.vars)
             {
                 string var_str = "${" + var.name + "}";
-                exp = exp.Replace(var_str, var.value);
-                assert = assert.Replace(var_str, var.value);
+                if (var.isanswer)
+                {
+                    content = content.Replace(var_str, UserDefine.MakeInputHTML("int", "text", var.name));
+                    text = text.Replace(var_str, "____");
+                    UserDefine.Answer answer = s.answers.First(e => e.name == var.name);
+                    s.answers.Remove(answer);
+                    foreach (UserDefine.Var v in s.vars)
+                    {
+                        if (!v.isanswer) { answer.expression = answer.expression.Replace("${" + v.name + "}", v.value); }
+                    }
+                    answer.value = JScript.JScriptRun("eval_expression", new object[] { answer.expression }).ToString() ;
+                    s.answers.Add(answer);
+                }
+                else
+                {
+                    content = content.Replace(var_str, var.value);
+                    assert = assert.Replace(var_str, var.value);
+                    text = text.Replace(var_str, var.value);
+                }
             }
-            s.content = exp;
+            s.content = content;
             s.assert = assert;
+            s.text = text;
             return s;
         }
+        
         private string RepaceVarAssert(List<UserDefine.Var> vars, string exp)
         {
             string s = exp;

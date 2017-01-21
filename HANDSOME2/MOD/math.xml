@@ -7,7 +7,11 @@
       <VAR type="int" min="0" max="100">Y</VAR>
       <VAR type="int" min="0" max="200">S</VAR>
     </VARS>
-    <ANSWER empty_num="1">X|Y|S</ANSWER>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}-${Y}</ANSWER>
+      <ANSWER name="Y">${S}-${X}</ANSWER>
+      <ANSWER name="S">${X}+${Y}</ANSWER>
+    </ANSWERS>
     <CONDITIONS>
       <CONDITION>${X}!=null,${S}!=null,${S}>=${X},${X}+100>=${S}</CONDITION>
       <CONDITION>${Y}!=null,${S}!=null,${S}>=${Y},${Y}+100>=${S}</CONDITION>
@@ -24,7 +28,12 @@
       <VAR type="int" min="0" max="100">Z</VAR>
       <VAR type="int" min="0" max="300">S</VAR>
     </VARS>
-    <ANSWER empty_num="1">X|Y|Z|S</ANSWER>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}-${Y}-${Z}</ANSWER>
+      <ANSWER name="Y">${S}-${X}-${Z}</ANSWER>
+      <ANSWER name="Z">${S}-${X}-${Y}</ANSWER>
+      <ANSWER name="S">${X}+${Y}+${Z}</ANSWER>
+    </ANSWERS>
     <CONDITIONS>
       <CONDITION>${X}!=null,${Y}!=null,${S}!=null,${S}>=${X}+${Y}</CONDITION>
       <CONDITION>${X}!=null,${Z}!=null,${S}!=null,${S}>=${X}+${Z}</CONDITION>
@@ -42,13 +51,39 @@
       <VAR type="int" min="0" max="100">S</VAR>
     </VARS>
     <CONDITIONS>
-      <CONDITION>${X}!=null,${Y}!=null,${X}>=${Y}</CONDITION>
-      <CONDITION>${X}!=null,${S}!=null,${X}>=${S}</CONDITION>
-      <CONDITION>${Y}!=null,${S}!=null,100>=${Y}+${S}</CONDITION>
-      <CONDITION>${S}==null</CONDITION>
+      <CONDITION>${X}==null,100>=${S}+${Y}</CONDITION>
+      <CONDITION>${Y}==null,${X}>=${S}</CONDITION>
+      <CONDITION>${S}==null,${X}>=${Y}</CONDITION>
     </CONDITIONS>
-    <ANSWER empty_num="1">X|Y|S</ANSWER>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}+${Y}</ANSWER>
+      <ANSWER name="Y">${X}-${S}</ANSWER>
+      <ANSWER name="S">${X}-${Y}</ANSWER>
+    </ANSWERS>
     <ASSERT>${X}-${Y}==${S}</ASSERT>
+    <TIMEOUT>10</TIMEOUT>
+  </SUBJECT>
+  <SUBJECT name="减法计算题2">
+    <TEMPLATE>${X}-${Y}-${Z}=${S}</TEMPLATE>
+    <VARS>
+      <VAR type="int" min="0" max="100">X</VAR>
+      <VAR type="int" min="0" max="100">Y</VAR>
+      <VAR type="int" min="0" max="100">Z</VAR>
+      <VAR type="int" min="0" max="100">S</VAR>
+    </VARS>
+    <CONDITIONS>
+      <CONDITION>${X}==null,100>=${S}+${Y}+${Z}</CONDITION>
+      <CONDITION>${S}==null,${X}>=${Y}+${Z},100>=${X}-${Z}-${Y}</CONDITION>
+      <CONDITION>${Y}==null,${X}>=${S}+${Z},100>=${X}-${S}-${Z}</CONDITION>
+      <CONDITION>${Z}==null,${X}>=${S}+${Y},100>=${X}-${S}-${Y}</CONDITION>
+    </CONDITIONS>
+    <ANSWERS empty_num="1">
+      <ANSWER name="X">${S}+${Y}+${Z}</ANSWER>
+      <ANSWER name="Y">${X}-${Z}-${S}</ANSWER>
+      <ANSWER name="Z">${X}-${Y}-${S}</ANSWER>
+      <ANSWER name="S">${X}-${Y}-${Z}</ANSWER>
+    </ANSWERS>
+    <ASSERT>${X}-${Y}-${Z}==${S}</ASSERT>
     <TIMEOUT>10</TIMEOUT>
   </SUBJECT>
 </SUBJECTS>

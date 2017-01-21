@@ -31,11 +31,15 @@ namespace HANDSOME2
         }
         public void GoHome()
         {
-            WB.Navigate(Application.StartupPath + @"..\..\..\PAGES\Home.html");
+            WB.Navigate(Application.StartupPath + @"\PAGES\Home.html");
         }
         public void GoToSubject()
         {
-            WB.Navigate(Application.StartupPath + @"..\..\..\PAGES\Subject.html");
+            WB.Navigate(Application.StartupPath + @"\PAGES\Subject.html");
+        }
+        public void GoToJudge()
+        {
+            WB.Navigate(Application.StartupPath + @"\PAGES\Judge.html");
         }
         public void LoadMod(string type)
         {
@@ -59,11 +63,17 @@ namespace HANDSOME2
         public string ShowPazzle(int index)
         {
             MODULE.UserDefine.Subject s = ls[index];
-            if (s.vars != null)
+            for (int i = 0; i < s.vars.Count; i++)
             {
-
+                MODULE.UserDefine.Var var = s.vars[i];
+                if (var.isanswer)
+                {
+                    string innerHTML = MODULE.UserDefine.MakeInputHTML("int", "text", var.name, var.value);
+                    s.content = s.content.Replace(MODULE.UserDefine.MakeInputHTML("int", "text", var.name), innerHTML);
+                }
             }
-            return ls[index].content;
+            ls[index] = s;
+            return s.content;
         }
         public void SaveAnswer(int index, string name, string value)
         {
@@ -72,11 +82,48 @@ namespace HANDSOME2
             if ((object)var != null)
             {
                 s.vars.Remove(var);
-                s.assert = s.assert.Replace("{" + name + "}", value);
-                var.value = MODULE.UserDefine.MakeInputHTML("int", "text", var.name, "width: 40px; text-align: center;", value);
+                var.value = value;
                 s.vars.Add(var);
             }
+            MODULE.UserDefine.Answer answer = s.answers.Find(e => e.name == name);
+            if ((object)answer != null)
+            {
+                s.answers.Remove(answer);
+                answer.user_value = value;
+                s.answers.Add(answer);
+            }
         }
-        
+        public void AssertAnswer(int index)
+        {
+            MODULE.UserDefine.Subject s = ls[index];
+            string assert = s.assert;
+            foreach (MODULE.UserDefine.Answer answer in s.answers)
+            {
+                if (answer.user_value == "" || answer.user_value == null) { return; }
+                assert = assert.Replace("${" + answer.name + "}", answer.user_value);
+            }
+            s.correct = (bool)MODULE.JScript.JScriptRun("eval_expression", new object[] { assert });
+            ls[index] = s;
+        }
+        public void ShowResult(int index)
+        {
+            MODULE.UserDefine.Subject s = ls[index];
+            List<string> la = new List<string>();
+            foreach (MODULE.UserDefine.Answer answer in s.answers)
+            {
+                la.Add(answer.user_value);
+            }
+            object[] param = new object[5] { index, s.name, s.text, string.Join(",", la), s.correct};
+            WB.Document.InvokeScript("showresult", param);
+        }
+        public string GetCorrectAnswer(int index)
+        {
+            List<string> ret = new List<string>();
+            foreach (MODULE.UserDefine.Answer answer in ls[index].answers)
+            {
+                ret.Add(answer.value);
+            }
+            return string.Join(",", ret);
+        }
     }
 }

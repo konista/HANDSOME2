@@ -4,15 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
-    <style type="text/css">
-        #Select1 {
-            width: 177px;
-            height: 51px;
-        }
-        #Select_MOD {
-            width: 162px;
-        }
-    </style>
     <script type="text/javascript">
         function loadmod() {
             var type = Select_Mod.item(Select_Mod.selectedIndex).value;
@@ -27,6 +18,7 @@
         }
         function addsubject()
         {
+            if (Select_Subject.selectedIndex < 0) { return;}
             var subject = Select_Subject.item(Select_Subject.selectedIndex).value;
             if (subject == "") { return; }
             var num = Text_Count.value;
@@ -63,31 +55,38 @@
 </script>
 </head>
 <body>
-    <div>
-        <select id="Select_Mod" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 200px;">
+    <br />
+    <div style="height: auto">
+        <select id="Select_Mod" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: absolute; left: 5%; width: 200px;">
             <option value="math">数学</option>
     <!--        <option value="chinese">语文</option>
             <option value="english">英语</option>-->
         </select>
-        <input id="Button_Mod" type="button" value="确定" onclick="loadmod()" style="position: relative; top: 15px; left: 100px" />
+        <input id="Button_Mod" type="button" value="选择" onclick="loadmod()" style="position: absolute; left: 40%; width: 40px" />
     </div>
-    <div>
-        <select id="Select_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: relative; top: 15px; left: 15px; width: 200px;">
+    <br /><br />
+    <div style="height: auto">
+        <select id="Select_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; position: absolute; left: 5%; width: 200px;">
         </select>
-        <input id="Text_Count" type="text" style="position: relative; top:15px; left: 30px; width:15px" onkeyup="this.value=this.value.replace(/\D/g,'')" onchange="this.value=this.value.replace(/\D/g,'')" />
-        <span style="position: relative; top: -5px; left: 265px; width: 15px; float: left;">个</span>
-        <input id="Butten_Add" type="button" value="添加" onclick="addsubject()" style="position: relative; top: 15px; left: 77px" />
+        <input id="Text_Count" type="text" style="position: absolute; left: 30%; width:15px; height: 15px; text-align: center;" onkeyup="this.value=this.value.replace(/\D/g,'')" onchange="this.value=this.value.replace(/\D/g,'')" />
+        <span style="position:absolute; left: 33%; width: 15px; font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold;">个</span>
+        <input id="Butten_Add" type="button" value="添加" onclick="addsubject()" style="position: absolute; left: 40%; width: 40px" />
     </div>
+    <br />
+    <br />
     <hr />
-    <div style="position: relative; height: 216px; font-family: 宋体, Arial, Helvetica, sans-serif; font-weight: bold; text-align: left; text-indent: 20px; vertical-align: top">
-        <table id="Table_Subject" style="width: 100%; text-align: center;" border="1">
+    <div style="height: auto; font-family: 宋体, Arial, Helvetica, sans-serif; font-weight: bold; ">
+        <table id="Table_Subject" style="border: thin solid #009933; width: 100%; text-align: center; right: 15px;" border="1">
             <tr>
-                <td style=""width: 80%;">题型</td>
-                <td style=""width: 10%;">题目数量</td>
-                <td style=""width: 10%;">删除</td>
+                <td width: 80%;" >题型</td>
+                <td width: 10%;" >题目数量</td>
+                <td width: 10%;" >删除</td>
             </tr>
         </table>
-        <input id="Button_Subject" type="button" value="开始作答" onclick="gotosubject()" style="position: relative; top: 50px; left: 700px" />
+    </div>
+    <br />
+    <div style="overflow: auto">
+        <input id="Button_Subject" type="button" value="开始作答" onclick="gotosubject()" style="float: right" />
     </div>
     
 </body>

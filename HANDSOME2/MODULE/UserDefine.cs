@@ -21,17 +21,27 @@ namespace HANDSOME2.MODULE
             public bool isanswer { get; set; }
         }
         [Serializable]
+        public struct Answer
+        {
+            public string name { get; set; }
+            public string value { get; set; }
+            public string user_value { get; set; }
+            public string expression { get; set; }
+        }
+        [Serializable]
         public struct Subject
         {
             public string name { get; set; }
             public string template { get; set; }
+            public string text { get; set; }
             public List<Var> vars { get; set; }
-            public List<string> answers { get; set; }
+            public List<Answer> answers { get; set; }
             public int empty_num { get; set; }
             public List<List<string>> conditions { get; set; }
             public string assert { get; set; }
             public int timeout { get; set; }
             public string content { get; set; }
+            public bool correct { get; set; }
         }
         public static T DeepClone<T>(T obj)
         {
@@ -43,7 +53,7 @@ namespace HANDSOME2.MODULE
                 return (T)formatter.Deserialize(ms);
             }
         }
-        public static string MakeInputHTML(string valuetype, string type, string id, string style, string value = "", string maxlength = "")
+        public static string MakeInputHTML(string valuetype, string type, string id, string value = "", string style = "font-family: 宋体, Arial, Helvetica, sans-serif; width: 40px; text-align: center; font-size: large; font-weight: bold;", string maxlength = "")
         {
             string ret = "<input ";
             switch (valuetype)

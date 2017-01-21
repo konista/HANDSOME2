@@ -16,7 +16,7 @@ namespace HANDSOME2.MODULE
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.IgnoreComments = true;
-                XmlReader reader = XmlReader.Create(System.AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\MOD\" + type + ".xml", settings);
+                XmlReader reader = XmlReader.Create(System.AppDomain.CurrentDomain.BaseDirectory + @"\MOD\" + type + ".xml", settings);
                 XmlDocument xd = new XmlDocument();
                 xd.Load(reader);
                 reader.Close();
@@ -60,10 +60,10 @@ namespace HANDSOME2.MODULE
                             s.vars = GetVars(xn);
                             break;
                         }
-                    case "ANSWER":
+                    case "ANSWERS":
                         {
-                            s.answers = GetAnswer(xn);
                             s.empty_num = GetEmptyNum(xn);
+                            s.answers = GetAnswers(xn);
                             break;
                         }
                     case "CONDITIONS":
@@ -95,7 +95,7 @@ namespace HANDSOME2.MODULE
 
         private string GetTemplate(XmlNode template)
         {
-            return template.InnerText.ToUpper();
+            return template.InnerText;
         }
 
         private List<UserDefine.Var> GetVars(XmlNode vars)
@@ -111,7 +111,7 @@ namespace HANDSOME2.MODULE
                 {
                     case "int":
                         {
-                            var.name = xn.InnerText.ToUpper();
+                            var.name = xn.InnerText;
                             var.max = GetAttribute(xn, "max");
                             var.min = GetAttribute(xn, "min");
                             var.value = GetAttribute(xn, "value");
@@ -127,9 +127,20 @@ namespace HANDSOME2.MODULE
             return lv;
         }
 
-        private List<string> GetAnswer(XmlNode answer)
+        private List<UserDefine.Answer> GetAnswers(XmlNode answers)
         {
-            return answer.InnerText.ToUpper().Split(new char[1] { '|' }).ToList<string>();
+            //return answer.InnerText.Split(new char[1] { '|' }).ToList<string>();
+            List<UserDefine.Answer> la = new List<UserDefine.Answer>();
+            XmlNodeList xnl = answers.ChildNodes;
+            foreach (XmlNode xn in xnl)
+            {
+                if (xn.Name != "ANSWER") { continue; }
+                UserDefine.Answer answer = new UserDefine.Answer();
+                answer.name = GetAttribute(xn, "name");
+                answer.expression = xn.InnerText;
+                la.Add(answer);
+            }
+            return la;
         }
 
         private int GetEmptyNum(XmlNode answer)
@@ -144,14 +155,14 @@ namespace HANDSOME2.MODULE
             foreach (XmlNode xn in xnl)
             {
                 if (xn.Name != "CONDITION") { continue; }
-                ls.Add(xn.InnerText.ToUpper().Split(new char[1] { ',' }).ToList<string>());
+                ls.Add(xn.InnerText.Split(new char[1] { ',' }).ToList<string>());
             }
             return ls;
         }
 
         private string GetAssert(XmlNode assert)
         {
-            return assert.InnerText.ToUpper();
+            return assert.InnerText;
         }
 
         private int GetTimeout(XmlNode timeout)

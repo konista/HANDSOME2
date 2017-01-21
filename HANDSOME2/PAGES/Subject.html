@@ -20,9 +20,12 @@
         }
         function showpuzzle(index)
         {
-            var puzzle = window.external.ShowPazzle(index);
-            alert(puzzle);
-            Div_Subject.innerHTML = puzzle;
+            Div_Subject.innerHTML = window.external.ShowPazzle(index);
+            var inputs = Div_Subject.getElementsByTagName("input");
+            if (inputs.length > 0)
+            {
+                inputs[0].focus();
+            }
         }
         function saveanswer(index)
         {
@@ -37,6 +40,17 @@
                 }
             }
         }
+        function assertallanswer()
+        {
+            for (var i = 0; i < total_num; i++)
+            {
+                assertanswer(i);
+            }
+        }
+        function assertanswer(index) {
+            window.external.AssertAnswer(index);
+        }
+
         function shownextpuzzle()
         {
             if (cur_index < total_num - 1)
@@ -64,7 +78,14 @@
         }
         function commit()
         {
-
+            if (event.srcElement.outerText == "交卷") {
+                event.returnValue = confirm("要交卷吗？不能再改了呦！");
+                if (event.returnValue) {
+                    saveanswer(cur_index);
+                    assertallanswer();
+                    window.external.GoToJudge();
+                }
+            }
         }
     </script>
 </head>
@@ -73,11 +94,11 @@
         <a href="javascript:;" onclick="gohome()">重新选题</a>
         <hr />
         <div id="Div_Index"></div>
-        <div id="Div_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; text-indent: 40px; height: 25px"></div>
+        <div id="Div_Subject" style="font-family: 宋体, Arial, Helvetica, sans-serif; font-size: large; font-weight: bold; height: 25px"></div>
         <div id="Div_Commit" style="text-align: right">
-            <input id="Butten_Prev" type="button" value="上一题" onclick="showprevpuzzle()" />
-            <input id="Butten_Next" type="button" value="下一题" onclick="shownextpuzzle()" />
-            <input id="Butten_Commit" type="button" value="交卷" onclick="commit()" />
+            <a href="javascript:;" onclick="showprevpuzzle()">上一题</a>
+            <a href="javascript:;" onclick="shownextpuzzle()">下一题</a>
+            <a href="javascript:;" onclick="commit()">交卷</a>
         </div>
     </div>
 </body>

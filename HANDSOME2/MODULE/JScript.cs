@@ -16,10 +16,10 @@ namespace HANDSOME2.MODULE
         {  
             public class MyJs  
             {  
-　　            public static function condition_assert(exp)  
+　　            public static function eval_expression(exp)  
 　　            {   
                     return eval(exp);  
-　　            }  
+　　            } 
             }  
         }";
         public static object JScriptRun(string jsMethodName, object[] input_params)

@@ -158,7 +158,7 @@
     </VARS>
     <CONDITIONS>
       <CONDITION>${X}==null,${Y}*2>${S}+1,${S}>=${Y}</CONDITION>
-      <CONDITION>${Y}==null,200>${S}+${X}+1,((${S}+${X}+1)%2)==0,${S}>=${Y}</CONDITION>
+      <CONDITION>${Y}==null,200>${S}+${X}+1,((${S}+${X}+1)%2)==0,${S}>=${X}</CONDITION>
       <CONDITION>${S}==null,${Y}>${X}+1,100>=${Y}*2-1-${X}</CONDITION>
     </CONDITIONS>
     <ANSWERS empty_num="1">
